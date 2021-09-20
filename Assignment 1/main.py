@@ -1,4 +1,6 @@
 # Write your assignment here
 
-if __name__ == '__main__':
-    print('hello')
+class LinearRegression:
+
+    def __init__(self,):
+        self.x = 1
