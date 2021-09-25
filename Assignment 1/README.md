@@ -4,6 +4,7 @@
 
 - json
 - numpy
+- -argparse
 
 ## Running `main.py`
 
