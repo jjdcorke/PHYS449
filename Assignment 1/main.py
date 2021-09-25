@@ -77,11 +77,13 @@ class LinearRegression:
         for i in range(self.numiter):
             self.batchgditer()
 
-
+#trainingtime
 linreg = LinearRegression(args.infilepath, args.jsonfilepath)
 linreg.analyticalwstar()
 linreg.train()
 
+#kinda slightly jank...oh well it works the way I thought it would ¯\_(ツ)_/¯
+#Basically, made a string, concatenated it the way it is to look nice and readable and then dump it in the .out file...still jank imo
 infilepath = args.infilepath
 outfilepath = infilepath.replace('.in','.out')
 outfile = open(outfilepath, 'wt')
@@ -94,3 +96,4 @@ for i in range(linreg.w.size):
 
 outfile.write(dump)
 outfile.close()
+#(ノಠ益ಠ)ノ彡┻━┻
