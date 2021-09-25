@@ -1,7 +1,8 @@
 # Write your assignment here
 import numpy as np 
-import argparse, json, os
+import argparse, json
 
+#CLI code: creates a parser for the command line to capture input and parameter files
 if __name__ == '__main__':
 
     # Command line arguments
@@ -20,7 +21,7 @@ class LinearRegression:
         #Loads the dataset from the target filename into a numpy array. As explained in the problem description, the array will be loaded with each row representing a datapoint and witht he last collumn representing our y values.
         self.dataset = np.loadtxt(datasetfilepath)
         self.numsamples = self.dataset.shape[0]
-        #add something for dimensions of xs
+        
 
         #Create dedicated arrays for xs and ys. Motivation for doing so it to make calling these values easier while also keeping their indexing in order. Will also make computing the analytical solution much easier since we will need to call ys
         self.xs = self.dataset[:,0:self.dataset.shape[1]-1]
@@ -33,25 +34,33 @@ class LinearRegression:
         #append our xs to the temporary array to create our pmatrix (i.e. big PHI)
         self.pmatrix = np.append(firstcolumn,self.xs, axis=1)
 
-        #Hyperparameters
+        #Hyperparameters and loading hyperparameter values from json file
         jsonfile = open(hyperparamfilepath) 
         dictionary = json.load(jsonfile)
         self.learningrate = dictionary['learning rate']
         self.numiter = dictionary['num iter']
 
+
+        #properties for w and wanalytical
         self.w = np.ones(self.xs.shape[1]+1)
         self.wanalytical = np.zeros(self.xs.shape[1]+1)
 
     def analyticalwstar(self):
+        #implements the analytical solution of linear regression
         self.wanalytical = np.matmul(np.matmul(np.linalg.inv(np.matmul(self.pmatrix.T,self.pmatrix)),self.pmatrix.T),self.ys)
 
+    #function used to help in calculating the GD. Also theoretically could be modified to return predicted values
     def model(self, x):
         return np.dot(self.w, x)
 
+    #helper function for calculating GD. Essentially a subroutine for calculating the sum of the gradients over the all samples
     def gdhelper(self, j,i):
         return (np.dot(self.w,self.pmatrix[j])-self.ys[j])*self.pmatrix[j][i]
-
+    
+    #batch GD function to iterate one epoch
     def batchgditer(self):
+
+        #update buffer to properly compute the GD and update all the values of w at "the same time"
         updatebuffer = np.zeros(self.w.size)
 
         for i in range(self.w.size):
@@ -63,6 +72,7 @@ class LinearRegression:
 
         self.w += updatebuffer
 
+    #method to traing the model
     def train(self):
         for i in range(self.numiter):
             self.batchgditer()
