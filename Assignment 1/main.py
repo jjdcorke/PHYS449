@@ -83,3 +83,4 @@ for i in range(linreg.w.size):
     dump += (str(linreg.w[i]) + "\n")
 
 outfile.write(dump)
+outfile.close()
