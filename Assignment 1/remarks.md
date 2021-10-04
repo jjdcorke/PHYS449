@@ -2,7 +2,6 @@
 
 
 ## Grading Remarks
-- Implemented batch gradient descent instead of gradient descent (-1)
 
 ## Other Remarks
 - Good structure of code
