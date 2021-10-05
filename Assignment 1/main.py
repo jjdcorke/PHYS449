@@ -2,16 +2,7 @@
 import numpy as np 
 import argparse, json
 
-#CLI code: creates a parser for the command line to capture input and parameter files
-if __name__ == '__main__':
 
-    # Command line arguments
-    parser = argparse.ArgumentParser(description='Assignment 1 input parser')
-
-    parser.add_argument('infilepath',  help='A file/path for the .in value file')
-    parser.add_argument('jsonfilepath', help = 'A file/path for the .json file for hyperparameters and number of itteration')
-   
-    args = parser.parse_args()
 
 #We create a base class for our linear regression to organize our data and methods that we will use to do linear regression. 
 class LinearRegression:
@@ -77,23 +68,35 @@ class LinearRegression:
         for i in range(self.numiter):
             self.batchgditer()
 
-#trainingtime
-linreg = LinearRegression(args.infilepath, args.jsonfilepath)
-linreg.analyticalwstar()
-linreg.train()
 
-#kinda slightly jank...oh well it works the way I thought it would ¯\_(ツ)_/¯
-#Basically, made a string, concatenated it the way it is to look nice and readable and then dump it in the .out file...still jank imo
-infilepath = args.infilepath
-outfilepath = infilepath.replace('.in','.out')
-outfile = open(outfilepath, 'wt')
-dump = "---- w analytical ---- \n"
-for i in range(linreg.w.size):
-    dump += (str(linreg.wanalytical[i]) + "\n")
-dump += " \n---- w GD ---- \n"
-for i in range(linreg.w.size):
-    dump += (str(linreg.w[i]) + "\n")
+#CLI code: creates a parser for the command line to capture input and parameter files
+if __name__ == '__main__':
 
-outfile.write(dump)
-outfile.close()
+    # Command line arguments
+    parser = argparse.ArgumentParser(description='Assignment 1 input parser')
+
+    parser.add_argument('infilepath',  help='A file/path for the .in value file')
+    parser.add_argument('jsonfilepath', help = 'A file/path for the .json file for hyperparameters and number of itteration')
+   
+    args = parser.parse_args()
+
+    #trainingtime
+    linreg = LinearRegression(args.infilepath, args.jsonfilepath)
+    linreg.analyticalwstar()
+    linreg.train()
+
+    #kinda slightly jank...oh well it works the way I thought it would ¯\_(ツ)_/¯
+    #Basically, made a string, concatenated it the way it is to look nice and readable and then dump it in the .out file...still jank imo
+    infilepath = args.infilepath
+    outfilepath = infilepath.replace('.in','.out')
+    outfile = open(outfilepath, 'wt')
+    dump = "---- w analytical ---- \n"
+    for i in range(linreg.w.size):
+        dump += (str(linreg.wanalytical[i]) + "\n")
+    dump += " \n---- w GD ---- \n"
+    for i in range(linreg.w.size):
+        dump += (str(linreg.w[i]) + "\n")
+
+    outfile.write(dump)
+    outfile.close()
 #(ノಠ益ಠ)ノ彡┻━┻
