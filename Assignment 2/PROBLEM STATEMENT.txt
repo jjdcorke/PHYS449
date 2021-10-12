@@ -1,0 +1,40 @@
+===PROBLEM STATEMENT===
+
+In this assignment you implement a multi-label classifier in PyTorch.
+
+Deadline: End of day (Midnight) Eastern Time Zone Friday Oct 8, 2021.
+
+Note: The last commit to the master branch before the deadline is used to assess
+your work. (Github's timestamp is a strict deadline for acceptance of your
+work).
+
+The command to run your code should be of the format
+
+python main.py param/param_file_name.json
+
+Your hyperparameters (e.g. learning rate, batch size, etc.) should be accessible
+through the json parameter file. Additional arguments to run your code are
+allowed. If you do use additional arguments, usage instructions for these flags
+including a short description of each, value type, and default values should be
+available by running
+
+python main.py --help
+
+Your code reads the data file provided in even_mnist.csv . This dataset is
+created from the original MNIST dataset by filtering out all odd numbers.
+Therefore the only labels you have to classify are 0, 2, 4, 6, and 8. The images
+are also reduced from the original 28 x 28 to 14 x 14 in order for the
+classification task to run faster on a typical laptop. Your dataset contains
+29492 samples and you are expected to set aside 3000 of the samples as your test
+dataset and not use them in training.
+
+Each row of the csv file is a flattened vector of the 14 x 14 image followed by
+the correct label. That means each row consists of 14 * 14 + 1 = 197 integers.
+The first 196 integers are 8-bit grayscale pixels (values 0 to 255) and the last
+integer is the correct label (values 0, 2, 4, 6, and 8).
+
+Your code should print out (in console) the progress of the optimizer through
+the training iterations on the training dataset (include all of the training
+loss, training accuracy, test loss, and test accuracy in your most verbose
+mode). At the end of training generate a report on the performance of the
+trained network on the test dataset.
