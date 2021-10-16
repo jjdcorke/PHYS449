@@ -6,6 +6,7 @@ import torch.nn.functional as func
 
 class EvenNet(nn.Module):
    
+
     def __init__(self):
         super(EvenNet, self).__init__()
        

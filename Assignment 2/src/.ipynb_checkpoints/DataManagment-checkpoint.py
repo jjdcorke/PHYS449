@@ -20,7 +20,6 @@ class Mnist(torch.utils.data.Dataset):
         return len(self.xs)
 
     def __getitem__(self,index):
-        
         return self.xs[index] , self.ys[index]
 
 test = Mnist()
