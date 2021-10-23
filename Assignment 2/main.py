@@ -20,11 +20,11 @@ class Mnist(torch.utils.data.Dataset):
         test = []
 
         #sample 3000 datapoints at random
-        for i in range(3000):
+        for i in sampling[:3000]:
             test.append(dataset[i])
         
         #sample the rest of the datapoints at random
-        for i in range(3000,29492):
+        for i in sampling[3000:29492]:
             train.append(dataset[i])
         #list to array convertion 
         test = np.array(test)
