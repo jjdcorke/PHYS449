@@ -1,3 +1,4 @@
+
 # Write your assignment here
 
 #import needed modules
@@ -83,8 +84,8 @@ class EvenNet(nn.Module):
     # Use if the same network is trained multiple times.
     def reset(self):
         self.inputlayer.reset_parameters()
-        self.hl1.reset_parameters()
-        self.hl2.reset_parameters()
+        self.hstack.reset_parameters()
+        
         self.outlayer.reset_parameters()
 
     

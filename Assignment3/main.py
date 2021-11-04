@@ -5,34 +5,42 @@ import torch.nn as nn
 import torch.optim as optim
 import argparse, json
 
+#class for generating to help generate vector field (i.e. dataset)
 class VecField:
     def __init__(self,dxdt,dydt):
         self.u = dxdt
         self.v = dydt
+
+        #vectorized verzons to help plot quiver plot
         self.uvec = np.vectorize(dxdt)
         self.vvec = np.vectorize(dydt)
         
     def dfdt(self,x,y):
         return [self.u(x,y),self.v(x,y)]
 
+#OdeNet essentially tries to learn the vector field \vec{f(x,y)}. 
 class OdeNet(nn.Module):
     def __init__(self, vectorfield, lb = (-2,-2), ub = (2,2), h = 0.01, lr = 0.01):
         super(OdeNet,self).__init__()
+
+        #lowerbou, uberbound, "stepsize", vectorfield
         self.lb = lb 
         self.ub = ub 
         self.h = h
         self.vectorfield = vectorfield
         
-
+        #neural network
         self.net = nn.Sequential(
             nn.Linear(2,50),
             nn.Tanh(),
             nn.Linear(50,2)
         )
         
-        self.optimizer = optim.SGD(self.parameters(),lr = lr)
+        #SGD for optimizer
+        self.optimizer = optim.Adam(self.parameters(),lr = lr)
         self.loss = nn.MSELoss(reduction = 'mean')
 
+        #generate training coordinates 
         self.trcords()
 
     def forward(self,x):
@@ -47,10 +55,10 @@ class OdeNet(nn.Module):
         self.optimizer.zero_grad()
         
         
-        prediction = self.forward(self.D) #used to calculate loss
+        prediction = self.forward(self.D) #used to calculate loss, predicts value of dfdt at x,y
 
         #calculate loss and propagate
-        loss = self.loss(prediction, self.L)
+        loss = self.loss(prediction, self.L) #MSE between true dfdt and prediction
         loss.backward()
         self.optimizer.step()
             
@@ -79,12 +87,15 @@ class OdeNet(nn.Module):
         print("Final Epoch: [" + str(i+1) + "/" + str(num_epoch) + "]")
         print("Training Loss: " + str(tloss))
         
-        
+        #plot and save
         mpl.plot(np.arange(num_epoch),trainloss)
         mpl.title("Loss vs Training Epoch")
-        mpl.savefig("plots/loss"+str(exp)+".png")
+        mpl.xlabel("Epoch")
+        mpl.ylabel("Loss")
         
-
+        mpl.savefig("plots/loss"+str(exp)+".png")
+        mpl.show(block=False)
+    #evaluate solution (add gradient with a set time-step to current position and repeat nsteps)
     def evaluate(self, xi, nstep):
         self.eval()
         positions = [xi]
@@ -107,13 +118,15 @@ class OdeNet(nn.Module):
         
         mpl.plot(xs,ys)
         mpl.plot(xs[0],ys[0],'ro')
-    
+        mpl.xlabel("xs")
+        mpl.ylabel("ys")
         
        
         
 
 
     def trcords(self):
+        #generate training coordinates and labels
         xs = np.linspace(self.lb[0],self.ub[0],int((self.ub[0]-self.lb[0])//(self.h/2)))
         ys = np.linspace(self.lb[1],self.ub[1],int((self.ub[1]-self.lb[1])//(self.h/2)))
         D = []
@@ -124,8 +137,8 @@ class OdeNet(nn.Module):
                     continue
                 D.append([x,y])
                 L.append(self.vectorfield.dfdt(x,y))
-        self.D = torch.tensor(D).float()
-        self.L = torch.tensor(L).float()
+        self.D = torch.tensor(D).float() #coordinates
+        self.L = torch.tensor(L).float() #labels
 
     def quiverplot(self):
         grid = np.meshgrid(np.linspace(self.lb[0],self.ub[0],50),np.linspace(self.lb[1],self.ub[1],50),indexing = "xy")
@@ -144,8 +157,9 @@ class OdeNet(nn.Module):
             mpl.title("Test Trajectory " + str(j))
             
             path = "plots/exp"+str(exp)+"testraj"+str(j)+".png"
-            mpl.savefig(path)
             
+            mpl.savefig(path)
+            mpl.show(block=False)
             j+=1
         
 
@@ -166,9 +180,9 @@ if __name__ == '__main__':
     u = lambda x,y : eval(dictionary["field"]["1"]["xfield"])
     v = lambda x,y : eval(dictionary["field"]["1"]["yfield"])
 
-    test = VecField(u,v)
+    test1 = VecField(u,v)
 
-    model = OdeNet(test, lr = dictionary["lr"])
+    model = OdeNet(test1, lr = dictionary["lr"])
 
     model.trcords()
     model.run(dictionary["num_epoch"], 1)
@@ -178,9 +192,9 @@ if __name__ == '__main__':
     u = lambda x,y : eval(dictionary["field"]["2"]["xfield"])
     v = lambda x,y : eval(dictionary["field"]["2"]["yfield"])
 
-    test = VecField(u,v)
+    test2 = VecField(u,v)
 
-    model = OdeNet(test, lr = dictionary["lr"])
+    model = OdeNet(test2, lr = dictionary["lr"])
 
     model.trcords()
     model.run(dictionary["num_epoch"], 2)
