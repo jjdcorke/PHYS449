@@ -1,0 +1,16 @@
+{
+	
+		"lr": 0.005,
+		"num_epoch": 500,
+		"field": {
+			"1": {
+				"xfield": "-y/np.sqrt(x**2 + y**2)",
+				"yfield": "x/np.sqrt(x**2 + y**2)"
+			},
+			"2": {
+				"xfield": "np.sin(np.pi*x) + np.sin(np.pi*y)",
+				"yfield": "np.cos(np.pi*y)"
+			}
+		}
+	
+}

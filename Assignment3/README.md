@@ -10,5 +10,5 @@
 To run `main.py`, use
 
 ```sh
-python main.py
+python3 main.py parameters.json [-1.0,-1.0] [1.0,1.0] 3
 ```
