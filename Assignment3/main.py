@@ -169,20 +169,23 @@ if __name__ == '__main__':
     parser.add_argument('params',  help='A file path to the parameter file')
     
     
-    parser.add_argument('lb')
-    parser.add_argument('ub')
-    parser.add_argument('numtest')
+    parser.add_argument('lb', help = 'lower bound of training set and test set, [lbx,lby]')
+    parser.add_argument('ub', help = 'upper bound for the training and test set.')
+    parser.add_argument('numtest', help = 'number of test trajectories to plot')
     args = parser.parse_args()
 
     jsonfile = open(str(args.params))
     dictionary = json.load(jsonfile)
+    lb = args.lb
+    up = args.ub
 
     u = lambda x,y : eval(dictionary["field"]["1"]["xfield"])
     v = lambda x,y : eval(dictionary["field"]["1"]["yfield"])
 
     test1 = VecField(u,v)
 
-    model = OdeNet(test1, lr = dictionary["lr"])
+
+    model = OdeNet(test1, lb, ub, lr = dictionary["lr"])
 
     model.trcords()
     model.run(dictionary["num_epoch"], 1)
@@ -194,7 +197,7 @@ if __name__ == '__main__':
 
     test2 = VecField(u,v)
 
-    model = OdeNet(test2, lr = dictionary["lr"])
+    model = OdeNet(test2, lb, ub, lr = dictionary["lr"])
 
     model.trcords()
     model.run(dictionary["num_epoch"], 2)
