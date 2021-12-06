@@ -1,0 +1,48 @@
+===PROBLEM STATEMENT===
+
+In this assignment you implement a variational auto-encoder (VAE) that learns
+to write even numbers. The training data set is the same one you used in
+Assignment 2. Your VAE should consist of convolutional units in its encoder.
+
+The data file is provided in data/even_mnist.csv . This dataset is the MNIST
+even numbers downsized to 14 x 14. More details about the format of this dataset
+can be found in the statement of Assignment 2.
+
+Deadline: End of day (Midnight) Eastern Time Zone Wednesday Dec 1, 2021
+
+All usage documentations for your hyperparameters and input arguments are
+expected to be as advised in previous assignments. As before include a thorough
+README.md in your assignment repository and have all command line arguments be
+well-documented and accessible through:
+
+python main.py --help
+
+You may also choose to use json parameter files. Should you do so, a sample json
+file and documentation on its usage should be clearly explained in README.md of
+your repository.
+
+==OUTPUT FILES==
+
+Your code should save a number of output files in a directory received in
+command line. For example, when running
+
+python main.py -o result_dir -n 100
+
+the code should generate the folder result_dir if it does not already exist and
+save all result files in this folder. The result files are all pdf figures as
+follows:
+
+loss.pdf
+
+This figure shows the progress of your VAE in training mode. We expect the loss
+to be decreasing and converging in this figure and avoid over-fitting for
+reasonable numbers of iterations in training.
+
+1.pdf, 2.pdf, ..., 100.pdf
+
+After training, your code should create a hundred digit sample images and store
+them in files of the format i.pdf where n runs from 1 to the input of flag -n.
+In this example n= 100.
+
+Remark. Include a verbose mode for your program, in which iterative reports on
+loss value in provided through the training epochs.
