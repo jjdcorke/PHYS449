@@ -156,7 +156,8 @@ class EvenVAE(nn.Module):
             img = img[0]
         
             np_img = img.numpy()
-            plt.figure()
+            plt.figure(figsize=(8,8))
+            
             plt.imshow(np.transpose(np_img, (1, 2, 0)), cmap='gray')
            
             plt.title("VAE Test Output " + str(n))
@@ -166,7 +167,7 @@ class EvenVAE(nn.Module):
     #function to test and save the outputs
     def test(self, n = 50):
         self.eval()
-        for i in range(n):
+        for i in range(int(n)):
             for data in random.sample(list(self.trainloader), 1):
                 img, _ = data
                 self.visualize_output(img, i)
@@ -205,6 +206,7 @@ class EvenVAE(nn.Module):
 
 
         #loss plotting
+        plt.figure(figsize=(10,8))
         plt.plot(np.arange(numepoch), trainloss)
         plt.title("Loss")
         plt.savefig("data/Outputs/loss.pdf")
